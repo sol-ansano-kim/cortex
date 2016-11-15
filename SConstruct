@@ -1537,20 +1537,20 @@ if doConfigure :
 		coreSources.remove( "src/IECore/EXRDeepImageWriter.cpp" )
 		corePythonSources.remove( "src/IECorePython/EXRDeepImageWriterBinding.cpp" )
 	
-	if c.CheckLibWithHeader( "tiff", "tiff.h", "CXX" ) :
-		for e in allCoreEnvs :
-			e.Append( CPPFLAGS = '-DIECORE_WITH_TIFF' )
-	else :
-		sys.stderr.write( "WARNING: no TIFF library found, no TIFF support, check TIFF_INCLUDE_PATH and TIFF_LIB_PATH.\n" )
-		coreSources.remove( "src/IECore/TIFFImageWriter.cpp" )
-		coreSources.remove( "src/IECore/TIFFImageReader.cpp" )
-		coreSources.remove( "src/IECore/ScopedTIFFErrorHandler.cpp" )		
-		corePythonSources.remove( "src/IECorePython/TIFFImageReaderBinding.cpp" )
-		corePythonSources.remove( "src/IECorePython/TIFFImageWriterBinding.cpp" )
-		
 	if c.CheckLibWithHeader( "jpeg", ["stdio.h", "jpeglib.h"], "CXX" ) :
 		for e in allCoreEnvs :
 			e.Append( CPPFLAGS = '-DIECORE_WITH_JPEG' )
+
+		if c.CheckLibWithHeader( "tiff", "tiff.h", "CXX" ) :
+			for e in allCoreEnvs :
+				e.Append( CPPFLAGS = '-DIECORE_WITH_TIFF' )
+		else :
+			sys.stderr.write( "WARNING: no TIFF library found, no TIFF support, check TIFF_INCLUDE_PATH and TIFF_LIB_PATH.\n" )
+			coreSources.remove( "src/IECore/TIFFImageWriter.cpp" )
+			coreSources.remove( "src/IECore/TIFFImageReader.cpp" )
+			coreSources.remove( "src/IECore/ScopedTIFFErrorHandler.cpp" )
+			corePythonSources.remove( "src/IECorePython/TIFFImageReaderBinding.cpp" )
+			corePythonSources.remove( "src/IECorePython/TIFFImageWriterBinding.cpp" )
 	else :
 		sys.stderr.write( "WARNING: no JPEG library found, no JPEG support, check JPEG_INCLUDE_PATH and JPEG_LIB_PATH.\n" )
 		coreSources.remove( "src/IECore/JPEGImageWriter.cpp" )
