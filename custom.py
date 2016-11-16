@@ -1,4 +1,5 @@
 import os
+import sys
 import platform
 
 
@@ -7,14 +8,21 @@ arnold_dir = ""
 depn_dir = ""
 
 
-if platform.system() == "Linux":
-    platform = "linux"
-else:
-    platform = "osx"
+for arg in sys.argv[1:]:
+    if arg.startswith("DEPS_DIR="):
+        tmp = arg[len("DEPS_DIR="):]
+        depn_dir = tmp
+    if arg.startswith("ARNOLD_DIR="):
+        tmp = arg[len("ARNOLD_DIR="):]
+        arnold_dir = tmp
 
 # depn dirs
 dep_lib = depn_dir + "/lib"
 dep_include = depn_dir + "/include"
+
+
+if platform.system() == "Darwin":
+    CXXFLAGS = ["-Wno-unused-local-typedef"]
 
 # include path
 TBB_INCLUDE_PATH = dep_include
